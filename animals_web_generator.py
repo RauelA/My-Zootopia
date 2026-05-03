@@ -7,30 +7,32 @@ def load_data(file_path):
         return json.load(handle)
 
 
+def serialize_animal(animal_obj):
+    """ Loads data from animals_adata.json and returns a html string """
+    output = f"""
+            <li class="cards__item">
+                <div class="card__title">{animal_obj["name"]}</div>
+                <div class="card__text">
+                    <strong>Diet:</strong> {animal_obj.get("characteristics", {}).get("diet", "Unknown")}<br/>
+                    <strong>Location:</strong> {animal_obj.get("locations", {})[0]}<br/>
+                    <strong>Type:</strong> {animal_obj.get("characteristics", {}).get("type", "Unknown")}<br/>
+                </div>
+            </li>
+            """
+    return output
+
+
 def animals_to_string():
+    """ Loads data from animals_adata.json and returns a html string """
     animals_data = load_data("animals_data.json")
     animals_html = ""
     for animal in animals_data:
-        name = animal.get("name", "Unknown")
-        diet = animal.get("characteristics", {}).get("diet", "Unknown")
-        animal_type = animal.get("characteristics", {}).get("type", "Unknown")
-        location = animal.get("locations", ["Unknown"])[0]
-
-        animals_html += f"""
-        <li class="cards__item">
-            <div class="card__title">{name}</div>
-            <div class="card__text">
-                <strong>Diet:</strong> Carnivore<br/>
-                <strong>Location:</strong> North-America and Canada<br/>
-                <strong>Type:</strong> mamal<br/>
-            </div>
-        </li>
-        """
-
+        animals_html += serialize_animal(animal)
     return animals_html
 
 
 def generate_html():
+    """ Generates a HTML file based on animals_adata.json """
     animals_html = animals_to_string()
     with open("animals_template.html", "r") as file:
         html_template = file.read()
@@ -39,4 +41,9 @@ def generate_html():
         file.write(final_html)
 
 
-generate_html()
+def __main__():
+    generate_html()
+
+
+if __name__ == "__main__":
+    __main__()
