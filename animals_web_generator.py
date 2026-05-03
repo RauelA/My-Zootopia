@@ -20,9 +20,9 @@ def animals_to_string():
         <li class="cards__item">
             <div class="card__title">{name}</div>
             <div class="card__text">
-                Diet: {diet}<br>
-                Location: {location}<br>
-                Type: {animal_type}
+                <strong>Diet:</strong> Carnivore<br/>
+                <strong>Location:</strong> North-America and Canada<br/>
+                <strong>Type:</strong> mamal<br/>
             </div>
         </li>
         """
