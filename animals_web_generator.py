@@ -78,7 +78,7 @@ def fetch_animals_via_api():
 
     # HTML Data
     if len(data) == 0:
-        html_content += f"<p>No animals found for '{animal_name}'</p>"
+        html_content += f"<h2>The animal '{animal}' doesn’t exist.</h2>"
     else:
         for animal in data:
             html_content += f"<h2>{animal['name']}</h2>"
