@@ -1,5 +1,6 @@
 import json
 import requests
+import data_fetcher
 
 def load_data(file_path):
     """ Loads a JSON file """
@@ -42,7 +43,7 @@ def generate_html():
 
 
 def generate_html_with_api():
-    """ Generates a HTML file based on animals_adata.json """
+    """ Generates a HTML file based on API """
     animals_html = fetch_animals_via_api()
     with open("animals_template.html", "r") as file:
         html_template = file.read()
@@ -52,14 +53,15 @@ def generate_html_with_api():
 
 
 def fetch_animals_via_api():
+    """ Generates a HTML file based on API """
 
     API_KEY = "3BWyYfqgKXRHZBts21pxS9F7SkIpEyV9WMXMNh90"
     url = "https://api.api-ninjas.com/v1/animals"
 
-    animal = input("Enter animal name: ")
+    animal_name = input("Enter animal name: ")
 
     headers = {"X-Api-Key": API_KEY}
-    params = {"name": animal}
+    params = {"name": animal_name}
 
     response = requests.get(url, headers=headers, params=params)
     print("Status code:", response.status_code)
@@ -78,7 +80,7 @@ def fetch_animals_via_api():
 
     # HTML Data
     if len(data) == 0:
-        html_content += f"<h2>The animal '{animal}' doesn’t exist.</h2>"
+        html_content += f"<h2>The animal '{animal_name}' doesn’t exist.</h2>"
     else:
         for animal in data:
             html_content += f"<h2>{animal['name']}</h2>"
@@ -106,9 +108,66 @@ def fetch_animals_via_api():
     return html_content
 
 
+def generate_html_with_data_fetcher():
+    """ Generates a HTML file based on data_fetcher.py """
+    animals_html = fetch_animals_with_data_fetcher()
+    with open("animals_template.html", "r") as file:
+        html_template = file.read()
+    final_html = html_template.replace("{animals}", animals_html)
+    with open("animals.html", "w") as file:
+        file.write(final_html)
+
+
+def fetch_animals_with_data_fetcher():
+    animal_name = input("Enter a name of an animal: ")
+
+    data = data_fetcher.fetch_data(animal_name)
+
+    # HTML Start
+    html_content = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Animals</title>
+        </head>
+        <body>
+            <h1>Animal Search Results</h1>
+        """
+
+    # HTML Data
+    if len(data) == 0:
+        html_content += f"<h2>The animal '{animal_name}' doesn’t exist.</h2>"
+    else:
+        for animal in data:
+            html_content += f"<h2>{animal['name']}</h2>"
+
+            taxonomy = animal.get("taxonomy", {})
+            characteristics = animal.get("characteristics", {})
+
+            html_content += "<ul>"
+
+            html_content += f"<li>Scientific Name: {taxonomy.get('scientific_name', 'N/A')}</li>"
+            html_content += f"<li>Family: {taxonomy.get('family', 'N/A')}</li>"
+            html_content += f"<li>Location: {', '.join(animal.get('locations', []))}</li>"
+            html_content += f"<li>Diet: {characteristics.get('diet', 'N/A')}</li>"
+            html_content += f"<li>Lifespan: {characteristics.get('lifespan', 'N/A')}</li>"
+
+            html_content += "</ul>"
+            html_content += "<hr>"
+
+    # HTML Ending
+    html_content += """
+        </body>
+        </html>
+        """
+
+    return html_content
+
+
 def __main__():
-    #generate_html()
-    generate_html_with_api()
+    #generate_html()  # This is a function from Zootopia 1
+    generate_html_with_data_fetcher()
+
 
 if __name__ == "__main__":
     __main__()
