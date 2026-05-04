@@ -1,5 +1,7 @@
 import json
 import requests
+import os
+from dotenv import load_dotenv
 import data_fetcher
 
 def load_data(file_path):
@@ -55,7 +57,8 @@ def generate_html_with_api():
 def fetch_animals_via_api():
     """ Generates a HTML file based on API """
 
-    API_KEY = "3BWyYfqgKXRHZBts21pxS9F7SkIpEyV9WMXMNh90"
+    load_dotenv()
+    API_KEY = os.getenv("API_KEY")
     url = "https://api.api-ninjas.com/v1/animals"
 
     animal_name = input("Enter animal name: ")
