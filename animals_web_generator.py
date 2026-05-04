@@ -1,5 +1,5 @@
 import json
-
+import requests
 
 def load_data(file_path):
     """ Loads a JSON file """
@@ -41,9 +41,32 @@ def generate_html():
         file.write(final_html)
 
 
-def __main__():
-    generate_html()
+def fetch_animals_via_api():
 
+    API_KEY = "3BWyYfqgKXRHZBts21pxS9F7SkIpEyV9WMXMNh90"
+    url = "https://api.api-ninjas.com/v1/animals"
+
+    animal = input("Enter animal name: ")
+
+    headers = {"X-Api-Key": API_KEY}
+    params = {"name": animal}
+
+    response = requests.get(url, headers=headers, params=params)
+
+    print("Status code:", response.status_code)
+
+    data = response.json()
+
+    print("\nResponse:")
+    if len(data) == 0:
+        print("No animals found!")
+    else:
+        print(data)
+
+
+def __main__():
+    #generate_html()
+    fetch_animals_via_api()
 
 if __name__ == "__main__":
     __main__()
